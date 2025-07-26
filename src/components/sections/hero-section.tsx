@@ -27,7 +27,7 @@ export default function HeroSection() {
           <img 
             src="/portfolio.png" 
             alt="Abhishek Kumar Pandey - Portfolio Photo" 
-            className="w-48 h-48 mx-auto rounded-full border-4 border-primary shadow-lg shadow-primary/50 animate-pulse-glow hover:animate-chakra-spin transition-all duration-500 chakra-glow object-cover" 
+            className="w-40 h-40 sm:w-48 sm:h-48 md:w-56 md:h-56 lg:w-64 lg:h-64 xl:w-72 xl:h-72 mx-auto rounded-full border-4 border-primary shadow-lg shadow-primary/50 animate-pulse-glow hover:animate-chakra-spin transition-all duration-500 chakra-glow object-cover" 
           />
         </div>
         
