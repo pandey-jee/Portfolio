@@ -10,6 +10,7 @@ export default function BlackholeAnimation({ isActive, size = 300 }: BlackholeAn
   const animationRef = useRef<number>();
   const starsRef = useRef<Star[]>([]);
   const [isInitialized, setIsInitialized] = useState(false);
+  const [animationPhase, setAnimationPhase] = useState<'normal' | 'compress' | 'expand' | 'returning'>('normal');
 
   class Star {
     orbital: number;
@@ -22,8 +23,8 @@ export default function BlackholeAnimation({ isActive, size = 300 }: BlackholeAn
     id: number;
     collapseBonus: number;
     color: string;
-    hoverPos: number;
-    expansePos: number;
+    compressPos: number;
+    expandPos: number;
     prevR: number;
     prevX: number;
     prevY: number;
@@ -37,46 +38,107 @@ export default function BlackholeAnimation({ isActive, size = 300 }: BlackholeAn
       this.centery = centery;
       this.maxorbit = maxorbit;
       
+      // Weighted random for orbit distribution
       const rands = [];
       rands.push(Math.random() * (maxorbit / 2) + 1);
       rands.push(Math.random() * (maxorbit / 2) + maxorbit);
       this.orbital = (rands.reduce((p, c) => p + c, 0) / rands.length);
+      
       this.x = centerx;
       this.y = centery + this.orbital;
       this.yOrigin = centery + this.orbital;
-      // Faster speed for more dynamic effect
-      this.speed = (Math.floor(Math.random() * 4) + 2.5) * Math.PI / 180;
+      this.speed = (Math.floor(Math.random() * 2.5) + 1.5) * Math.PI / 180;
       this.rotation = 0;
       this.startRotation = (Math.floor(Math.random() * 360) + 1) * Math.PI / 180;
       this.id = id;
+      
       this.collapseBonus = this.orbital - (maxorbit * 0.7);
       if (this.collapseBonus < 0) this.collapseBonus = 0;
       
-      // Enhanced chakra-themed gradient with more glow
-      const t = this.orbital / maxorbit;
-      if (t < 0.3) {
-        this.color = this.lerpColor('#ffffff', '#38b6ff', t * 3.33); // bright white to chakra blue
-      } else if (t < 0.7) {
-        this.color = this.lerpColor('#38b6ff', '#ff6b35', (t - 0.3) * 2.5); // chakra blue to orange
-      } else {
-        this.color = this.lerpColor('#ff6b35', '#005078', (t - 0.7) * 3.33); // orange to deep blue
-      }
-
-      this.hoverPos = centery + (maxorbit / 2) + this.collapseBonus;
-      this.expansePos = centery + (this.id % 100) * -12 + (Math.floor(Math.random() * 25) + 1);
+      // Blue particles for better visibility against the image
+      const colors = [
+        'rgba(59, 130, 246, 0.9)', // Bright blue (primary)
+        'rgba(96, 165, 250, 0.9)', // Light blue
+        'rgba(37, 99, 235, 0.9)',  // Dark blue
+        'rgba(147, 197, 253, 0.8)', // Very light blue
+        'rgba(29, 78, 216, 0.9)'   // Deep blue
+      ];
+      this.color = colors[Math.floor(Math.random() * colors.length)];
+      
+      // Compress position (closer to center)
+      this.compressPos = centery + (maxorbit / 4) + this.collapseBonus;
+      // Expand position (far from center)
+      this.expandPos = centery + (this.id % 100) * -12 + (Math.floor(Math.random() * 25) + 1);
+      
       this.prevR = this.startRotation;
       this.prevX = this.x;
       this.prevY = this.y;
       this.originalY = this.yOrigin;
     }
 
-    lerpColor(a: string, b: string, t: number): string {
-      a = a.replace('#', '');
-      b = b.replace('#', '');
-      const ar = parseInt(a.substring(0, 2), 16), ag = parseInt(a.substring(2, 4), 16), ab = parseInt(a.substring(4, 6), 16);
-      const br = parseInt(b.substring(0, 2), 16), bg = parseInt(b.substring(2, 4), 16), bb = parseInt(b.substring(4, 6), 16);
-      const alpha = Math.max(0.6, 1 - t * 0.3); // More opacity for better glow
-      return `rgba(${Math.round(ar + (br - ar) * t)},${Math.round(ag + (bg - ag) * t)},${Math.round(ab + (bb - ab) * t)},${alpha})`;
+    draw(context: CanvasRenderingContext2D, currentTime: number, phase: string) {
+      // Update rotation
+      const rotationSpeed = phase === 'expand' ? this.speed / 2 : this.speed;
+      this.rotation = this.startRotation + (currentTime * rotationSpeed);
+      
+      // Movement based on phase
+      switch (phase) {
+        case 'normal':
+          // Normal orbit
+          if (this.y > this.yOrigin) this.y -= 2.5;
+          if (this.y < this.yOrigin - 4) this.y += (this.yOrigin - this.y) / 10;
+          break;
+          
+        case 'compress':
+          // Move towards compressed position (closer to center)
+          if (this.y > this.compressPos) {
+            this.y -= (this.y - this.compressPos) / 8;
+          }
+          if (this.y < this.compressPos - 4) {
+            this.y += 3;
+          }
+          break;
+          
+        case 'expand':
+          // Move to expansion position (far out)
+          if (this.y > this.expandPos) {
+            this.y -= Math.floor(this.expandPos - this.y) / -60;
+          }
+          break;
+          
+        case 'returning':
+          // Return to original orbit slowly
+          if (Math.abs(this.y - this.originalY) > 2) {
+            this.y += (this.originalY - this.y) / 40;
+          } else {
+            this.y = this.originalY;
+            this.yOrigin = this.originalY;
+          }
+          break;
+      }
+
+      // Draw the particle trail (like in original code)
+      context.save();
+      context.fillStyle = this.color;
+      context.strokeStyle = this.color;
+      context.beginPath();
+      
+      // Calculate old position with rotation
+      const oldPos = this.rotate(this.centerx, this.centery, this.prevX, this.prevY, -this.prevR);
+      context.moveTo(oldPos[0], oldPos[1]);
+      
+      // Apply rotation and draw line to current position
+      context.translate(this.centerx, this.centery);
+      context.rotate(this.rotation);
+      context.translate(-this.centerx, -this.centery);
+      context.lineTo(this.x, this.y);
+      context.stroke();
+      
+      context.restore();
+
+      this.prevR = this.rotation;
+      this.prevX = this.x;
+      this.prevY = this.y;
     }
 
     rotate(cx: number, cy: number, x: number, y: number, angle: number): [number, number] {
@@ -86,57 +148,22 @@ export default function BlackholeAnimation({ isActive, size = 300 }: BlackholeAn
       const ny = (cos * (y - cy)) - (sin * (x - cx)) + cy;
       return [nx, ny];
     }
-
-    draw(context: CanvasRenderingContext2D, currentTime: number, collapse: boolean) {
-      // Enhanced movement with faster response
-      this.rotation = this.startRotation + (currentTime * this.speed);
-      
-      if (!collapse) {
-        if (this.y > this.yOrigin) this.y -= 3.5; // Faster movement
-        if (this.y < this.yOrigin - 4) this.y += (this.yOrigin - this.y) / 8;
-      } else {
-        if (this.y > this.hoverPos) this.y -= (this.hoverPos - this.y) / -4; // Faster collapse
-        if (this.y < this.hoverPos - 4) this.y += 3.5;
-      }
-
-      // Enhanced glowing particle trail with multiple layers
-      context.save();
-      
-      // Outer glow layer
-      context.shadowColor = this.color;
-      context.shadowBlur = 25; // Increased blur for more glow
-      context.globalAlpha = 0.4;
-      context.fillStyle = this.color;
-      context.beginPath();
-      const pos = this.rotate(this.centerx, this.centery, this.prevX, this.prevY, -this.prevR);
-      context.arc(pos[0], pos[1], 3 + Math.random() * 1.5, 0, 2 * Math.PI); // Larger particles
-      context.fill();
-      
-      // Inner bright core
-      context.shadowBlur = 15;
-      context.globalAlpha = 0.8;
-      context.fillStyle = '#ffffff';
-      context.beginPath();
-      context.arc(pos[0], pos[1], 1.2 + Math.random() * 0.8, 0, 2 * Math.PI);
-      context.fill();
-      
-      // Additional sparkle effect
-      if (Math.random() > 0.95) {
-        context.shadowBlur = 20;
-        context.globalAlpha = 0.9;
-        context.fillStyle = '#ffffff';
-        context.beginPath();
-        context.arc(pos[0] + (Math.random() - 0.5) * 4, pos[1] + (Math.random() - 0.5) * 4, 0.5, 0, 2 * Math.PI);
-        context.fill();
-      }
-      
-      context.restore();
-
-      this.prevR = this.rotation;
-      this.prevX = this.x;
-      this.prevY = this.y;
-    }
   }
+
+  // Handle animation phase changes when isActive changes
+  useEffect(() => {
+    if (isActive) {
+      // Keep it in normal orbital phase continuously
+      setAnimationPhase('normal');
+    }
+  }, [isActive]);
+
+  // Reset when not active
+  useEffect(() => {
+    if (!isActive) {
+      setAnimationPhase('normal');
+    }
+  }, [isActive]);
 
   useEffect(() => {
     const canvas = canvasRef.current;
@@ -151,14 +178,22 @@ export default function BlackholeAnimation({ isActive, size = 300 }: BlackholeAn
     
     const centerx = size / 2;
     const centery = size / 2;
-    const maxorbit = size * 0.4; // Adjusted for container size
+    const maxorbit = Math.min(size * 0.5, 300); // Increased orbit range for better visibility
 
-    context.globalCompositeOperation = "lighter";
+    context.globalCompositeOperation = "lighter"; // Change back to lighter for visible particles
 
-    // Initialize stars
+    // Set DPI
+    const scaleFactor = 192 / 96;
+    canvas.style.width = size + 'px';
+    canvas.style.height = size + 'px';
+    canvas.width = Math.ceil(size * scaleFactor);
+    canvas.height = Math.ceil(size * scaleFactor);
+    context.scale(scaleFactor, scaleFactor);
+
+    // Initialize stars - increased quantity for better effect
     if (!isInitialized) {
       starsRef.current = [];
-      for (let i = 0; i < 1500; i++) { // More stars for denser effect
+      for (let i = 0; i < 5000; i++) { // Doubled the particles for higher density
         starsRef.current.push(new Star(centerx, centery, maxorbit, i));
       }
       setIsInitialized(true);
@@ -169,15 +204,18 @@ export default function BlackholeAnimation({ isActive, size = 300 }: BlackholeAn
     function animate() {
       if (!context) return;
       
-      const currentTime = (Date.now() - startTime) / 30; // Faster time progression
+      const currentTime = (Date.now() - startTime) / 50;
       
-      // Clear canvas with slight trail effect for smoother animation
-      context.fillStyle = 'rgba(0, 0, 0, 0.15)';
+      // Clear canvas completely to see particles clearly 
+      context.clearRect(0, 0, size, size);
+      
+      // Add very light trail effect for better particle visibility
+      context.fillStyle = 'rgba(0, 0, 0, 0.03)';
       context.fillRect(0, 0, size, size);
       
       // Draw all stars
       starsRef.current.forEach(star => {
-        star.draw(context, currentTime, isActive);
+        star.draw(context, currentTime, animationPhase);
       });
       
       animationRef.current = requestAnimationFrame(animate);
@@ -190,45 +228,20 @@ export default function BlackholeAnimation({ isActive, size = 300 }: BlackholeAn
         cancelAnimationFrame(animationRef.current);
       }
     };
-  }, [isActive, size, isInitialized]);
+  }, [size, isInitialized, animationPhase]);
 
   return (
     <div className="absolute inset-0 flex items-center justify-center pointer-events-none">
-      {/* Enhanced background glow effects */}
-      <div 
-        className="absolute rounded-full animate-pulse"
-        style={{
-          width: size * 1.2,
-          height: size * 1.2,
-          background: 'radial-gradient(circle at 48% 50%, #ffffff 0%, #38b6ff 20%, #ff6b35 60%, #005078 100%)',
-          filter: 'blur(40px) brightness(1.5) saturate(1.5)',
-          opacity: isActive ? 0.8 : 0.3,
-          transition: 'opacity 0.5s ease-in-out'
-        }}
-      />
-      
-      {/* Outer electric rim */}
-      <div 
-        className="absolute rounded-full"
-        style={{
-          width: size * 0.9,
-          height: size * 0.9,
-          background: `conic-gradient(from 0deg, #ffffff 0%, #38b6ff 25%, #ff6b35 50%, #38b6ff 75%, #ffffff 100%)`,
-          borderRadius: '50%',
-          filter: 'blur(2px)',
-          opacity: isActive ? 0.9 : 0.4,
-          transition: 'opacity 0.5s ease-in-out',
-          animation: isActive ? 'spin 3s linear infinite' : 'none'
-        }}
-      />
-      
-      {/* Canvas for particle animation */}
+      {/* Canvas for particle animation - this is the main effect */}
       <canvas
         ref={canvasRef}
-        className="rounded-full"
+        className="absolute"
         style={{
           opacity: isActive ? 1 : 0,
-          transition: 'opacity 0.5s ease-in-out'
+          transition: 'opacity 0.5s ease-in-out',
+          backgroundColor: 'transparent', // Make background transparent so we only see particles
+          borderRadius: '50%',
+          mixBlendMode: 'screen' // Makes particles more visible against dark backgrounds
         }}
       />
     </div>

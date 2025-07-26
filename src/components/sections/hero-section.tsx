@@ -2,6 +2,7 @@ import { useState } from "react";
 import { useAudio } from "@/hooks/use-audio";
 import { Button } from "@/components/ui/button";
 import ResumePreviewModal from "@/components/ui/resume-preview-modal";
+import BlackholeAnimation from "@/components/effects/blackhole-animation";
 
 export default function HeroSection() {
   const { playChakraSound } = useAudio();
@@ -21,14 +22,25 @@ export default function HeroSection() {
   };
 
   return (
-    <section id="home" className="min-h-screen hero-bg flex items-center justify-center relative">
+    <section id="home" className="min-h-screen hero-bg flex items-center justify-center relative pt-20 sm:pt-24 md:pt-8 lg:pt-0">
       <div className="container mx-auto px-6 text-center z-10">
-        <div className="mb-8">
-          <img 
-            src="/portfolio.png" 
-            alt="Abhishek Kumar Pandey - Portfolio Photo" 
-            className="w-40 h-40 sm:w-48 sm:h-48 md:w-56 md:h-56 lg:w-64 lg:h-64 xl:w-72 xl:h-72 mx-auto rounded-full border-4 border-primary shadow-lg shadow-primary/50 animate-pulse-glow hover:animate-chakra-spin transition-all duration-500 chakra-glow object-cover" 
-          />
+        <div className="mb-8 relative mt-4 sm:mt-8 md:mt-4 lg:mt-0">
+          {/* Black hole animation around the image - always active */}
+          <div className="absolute inset-0 flex items-center justify-center">
+            <BlackholeAnimation 
+              isActive={true} 
+              size={400} 
+            />
+          </div>
+          
+          {/* Static image in center */}
+          <div className="relative z-10 flex items-center justify-center">
+            <img 
+              src="/portfolio.png" 
+              alt="Abhishek Kumar Pandey - Portfolio Photo" 
+              className="w-40 h-40 sm:w-48 sm:h-48 md:w-56 md:h-56 lg:w-64 lg:h-64 xl:w-72 xl:h-72 rounded-full border-4 border-primary shadow-lg shadow-primary/50 animate-pulse-glow transition-all duration-500 chakra-glow object-cover" 
+            />
+          </div>
         </div>
         
         <h1 className="font-orbitron text-5xl md:text-7xl font-black mb-4 animate-text-glow hover:animate-glitch transition-all duration-300">
