@@ -80,24 +80,32 @@ export default function SkillsSection() {
         </h2>
         <p className="text-center text-slate-300 mb-16 text-lg animate-fade-in-up">My chakra-infused technical abilities and mastered jutsu</p>
         
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 max-w-7xl mx-auto">
           {skillCategories.map((category, index) => (
             <div 
               key={index}
-              className="skill-scroll bg-gradient-to-br from-slate-700/50 to-slate-800/50 backdrop-blur-sm border border-slate-600/30 rounded-xl p-6 chakra-glow cursor-pointer hover:from-slate-600/50 hover:to-slate-700/50 transition-all duration-300 group"
+              className="skill-scroll bg-gradient-to-br from-slate-700/50 to-slate-800/50 backdrop-blur-sm border border-slate-600/30 rounded-xl p-6 chakra-glow cursor-pointer hover:from-slate-600/50 hover:to-slate-700/50 transition-all duration-300 group min-h-[280px] flex flex-col"
               onClick={handleSkillClick}
             >
-              <div className="text-center mb-4">
-                <i className={`${category.icon} text-4xl ${category.color} mb-2`}></i>
-                <h3 className={`font-orbitron text-xl font-bold ${category.color}`}>
+              <div className="text-center mb-6">
+                <i className={`${category.icon} text-4xl ${category.color} mb-3 group-hover:scale-110 transition-transform duration-300`}></i>
+                <h3 className={`font-orbitron text-xl font-bold ${category.color} group-hover:text-opacity-90 transition-all duration-300`}>
                   {category.title}
                 </h3>
               </div>
-              <div className="space-y-3">
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 flex-1">
                 {category.skills.map((skill, skillIndex) => (
-                  <div key={skillIndex} className="flex items-center space-x-3 group hover:bg-slate-700/30 p-2 rounded-lg transition-all duration-300">
-                    <i className={`${skill.icon} text-2xl ${skill.color} group-hover:scale-110 transition-transform duration-300`}></i>
-                    <span className="text-white group-hover:text-gray-100 transition-colors duration-300">{skill.name}</span>
+                  <div key={skillIndex} className="flex flex-col items-center text-center group hover:bg-slate-600/20 p-3 rounded-lg transition-all duration-300 relative">
+                    <div className="mb-3">
+                      <i className={`${skill.icon} text-3xl ${skill.color} group-hover:scale-125 transition-all duration-300 drop-shadow-lg`}></i>
+                    </div>
+                    
+                    <span className="text-white text-sm font-medium group-hover:text-gray-100 transition-colors duration-300">
+                      {skill.name}
+                    </span>
+                    
+                    {/* Hover effect overlay */}
+                    <div className="absolute inset-0 bg-gradient-to-t from-transparent to-slate-500/10 opacity-0 group-hover:opacity-100 transition-opacity duration-300 rounded-lg pointer-events-none"></div>
                   </div>
                 ))}
               </div>

@@ -1,8 +1,11 @@
+import { useState } from "react";
 import { useAudio } from "@/hooks/use-audio";
 import { Button } from "@/components/ui/button";
+import ResumePreviewModal from "@/components/ui/resume-preview-modal";
 
 export default function HeroSection() {
   const { playChakraSound } = useAudio();
+  const [isResumeModalOpen, setIsResumeModalOpen] = useState(false);
 
   const handleProjectsClick = () => {
     playChakraSound();
@@ -14,8 +17,7 @@ export default function HeroSection() {
 
   const handleResumeClick = () => {
     playChakraSound();
-    // TODO: Implement resume download
-    console.log('Download resume clicked');
+    setIsResumeModalOpen(true);
   };
 
   return (
@@ -60,6 +62,12 @@ export default function HeroSection() {
       <div className="absolute top-20 left-20 w-4 h-4 bg-primary rounded-full animate-float opacity-60"></div>
       <div className="absolute top-40 right-32 w-3 h-3 bg-orange-500 rounded-full animate-float opacity-50" style={{animationDelay: '2s'}}></div>
       <div className="absolute bottom-32 left-1/4 w-5 h-5 bg-primary rounded-full animate-float opacity-40" style={{animationDelay: '4s'}}></div>
+      
+      {/* Resume Preview Modal */}
+      <ResumePreviewModal 
+        isOpen={isResumeModalOpen} 
+        onClose={() => setIsResumeModalOpen(false)} 
+      />
     </section>
   );
 }

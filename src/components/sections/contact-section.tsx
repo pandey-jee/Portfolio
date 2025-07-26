@@ -1,5 +1,7 @@
+import { useState } from "react";
 import { useAudio } from "@/hooks/use-audio";
 import { Button } from "@/components/ui/button";
+import ResumePreviewModal from "@/components/ui/resume-preview-modal";
 
 const contactMethods = [
   {
@@ -30,6 +32,7 @@ const contactMethods = [
 
 export default function ContactSection() {
   const { playChakraSound } = useAudio();
+  const [isResumeModalOpen, setIsResumeModalOpen] = useState(false);
 
   const handleContactClick = () => {
     playChakraSound();
@@ -43,8 +46,7 @@ export default function ContactSection() {
 
   const handleDownloadResume = () => {
     playChakraSound();
-    // TODO: Implement resume download
-    console.log('Download resume clicked');
+    setIsResumeModalOpen(true);
   };
 
   return (
@@ -103,6 +105,12 @@ export default function ContactSection() {
           />
         </div>
       </div>
+      
+      {/* Resume Preview Modal */}
+      <ResumePreviewModal 
+        isOpen={isResumeModalOpen} 
+        onClose={() => setIsResumeModalOpen(false)} 
+      />
     </section>
   );
 }
