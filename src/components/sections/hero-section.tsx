@@ -25,9 +25,9 @@ export default function HeroSection() {
       <div className="container mx-auto px-6 text-center z-10">
         <div className="mb-8">
           <img 
-            src="https://images.unsplash.com/photo-1578662996442-48f60103fc96?ixlib=rb-4.0.3&auto=format&fit=crop&w=400&h=400" 
-            alt="Ninja character with chakra effects" 
-            className="w-48 h-48 mx-auto rounded-full border-4 border-primary shadow-lg shadow-primary/50 animate-pulse-glow hover:animate-chakra-spin transition-all duration-500 chakra-glow" 
+            src="/portfolio.png" 
+            alt="Abhishek Kumar Pandey - Portfolio Photo" 
+            className="w-48 h-48 mx-auto rounded-full border-4 border-primary shadow-lg shadow-primary/50 animate-pulse-glow hover:animate-chakra-spin transition-all duration-500 chakra-glow object-cover" 
           />
         </div>
         
