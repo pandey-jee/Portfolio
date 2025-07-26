@@ -1,0 +1,466 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  --background: hsl(240, 10%, 3.9%);
+  --foreground: hsl(0, 0%, 98%);
+  --muted: hsl(240, 3.7%, 15.9%);
+  --muted-foreground: hsl(240, 5%, 64.9%);
+  --popover: hsl(240, 10%, 3.9%);
+  --popover-foreground: hsl(0, 0%, 98%);
+  --card: hsl(240, 10%, 3.9%);
+  --card-foreground: hsl(0, 0%, 98%);
+  --border: hsl(240, 3.7%, 15.9%);
+  --input: hsl(240, 3.7%, 15.9%);
+  --primary: hsl(207, 90%, 54%);
+  --primary-foreground: hsl(211, 100%, 99%);
+  --secondary: hsl(240, 3.7%, 15.9%);
+  --secondary-foreground: hsl(0, 0%, 98%);
+  --accent: hsl(240, 3.7%, 15.9%);
+  --accent-foreground: hsl(0, 0%, 98%);
+  --destructive: hsl(0, 62.8%, 30.6%);
+  --destructive-foreground: hsl(0, 0%, 98%);
+  --ring: hsl(240, 4.9%, 83.9%);
+  --radius: 0.5rem;
+  
+  /* Naruto-inspired colors */
+  --chakra-blue: hsl(207, 90%, 54%);
+  --chakra-orange: hsl(24, 95%, 53%);
+  --dark-navy: hsl(222, 84%, 5%);
+  --slate-800: hsl(215, 28%, 17%);
+  --slate-700: hsl(215, 20%, 25%);
+  --slate-600: hsl(215, 16%, 35%);
+}
+
+@layer base {
+  * {
+    @apply border-border;
+    cursor: none;
+  }
+
+  body {
+    @apply font-sans antialiased bg-background text-foreground;
+    font-family: 'Inter', sans-serif;
+    overflow-x: hidden;
+  }
+  
+  .font-orbitron {
+    font-family: 'Orbitron', sans-serif;
+  }
+}
+
+@layer components {
+  .custom-cursor {
+    position: fixed;
+    width: 20px;
+    height: 20px;
+    background: radial-gradient(circle, rgba(59, 130, 246, 0.8) 0%, rgba(59, 130, 246, 0.4) 50%, transparent 70%);
+    border-radius: 50%;
+    pointer-events: none;
+    z-index: 9999;
+    transition: transform 0.1s ease-out;
+    box-shadow: 0 0 20px rgba(59, 130, 246, 0.6);
+  }
+  
+  .custom-cursor::before {
+    content: '';
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    width: 8px;
+    height: 8px;
+    background: rgba(255, 255, 255, 0.9);
+    border-radius: 50%;
+    transform: translate(-50%, -50%);
+    animation: chakra-spin 2s linear infinite;
+  }
+  
+  .custom-cursor.hover {
+    transform: scale(2.5);
+    background: radial-gradient(circle, rgba(59, 130, 246, 1) 0%, rgba(59, 130, 246, 0.8) 40%, rgba(255, 165, 0, 0.4) 70%, transparent 90%);
+    box-shadow: 0 0 50px rgba(59, 130, 246, 1), 0 0 100px rgba(59, 130, 246, 0.5);
+    animation: rasengan-pulse 0.8s ease-in-out infinite alternate;
+  }
+  
+  .chakra-ripple {
+    position: absolute;
+    border-radius: 50%;
+    background: radial-gradient(circle, rgba(59, 130, 246, 0.4) 0%, transparent 70%);
+    transform: scale(0);
+    pointer-events: none;
+  }
+  
+  .chakra-glow {
+    position: relative;
+    transition: all 0.3s ease;
+  }
+  
+  .chakra-glow:hover {
+    box-shadow: 0 0 30px rgba(59, 130, 246, 0.5);
+    transform: translateY(-5px);
+  }
+  
+  .skill-scroll {
+    background: linear-gradient(135deg, rgba(30, 41, 59, 0.9) 0%, rgba(51, 65, 85, 0.8) 100%);
+    border: 2px solid rgba(59, 130, 246, 0.3);
+    transition: all 0.3s ease;
+  }
+  
+  .skill-scroll:hover {
+    border-color: rgba(59, 130, 246, 0.8);
+    box-shadow: 0 0 30px rgba(59, 130, 246, 0.4);
+    transform: translateY(-10px) scale(1.05);
+  }
+  
+  .mission-card {
+    background: linear-gradient(135deg, rgba(15, 23, 42, 0.95) 0%, rgba(30, 41, 59, 0.9) 100%);
+    border: 2px solid rgba(249, 115, 22, 0.3);
+    transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+    position: relative;
+    overflow: hidden;
+  }
+  
+  .mission-card::before {
+    content: '';
+    position: absolute;
+    top: -50%;
+    left: -50%;
+    width: 200%;
+    height: 200%;
+    background: linear-gradient(45deg, transparent 30%, rgba(59, 130, 246, 0.1) 50%, transparent 70%);
+    transform: rotate(45deg);
+    transition: transform 0.6s ease;
+    opacity: 0;
+  }
+  
+  .mission-card:hover::before {
+    opacity: 1;
+    transform: rotate(45deg) translate(50%, 50%);
+  }
+  
+  .mission-card:hover {
+    border-color: rgba(249, 115, 22, 0.8);
+    box-shadow: 0 0 40px rgba(249, 115, 22, 0.3), 0 0 80px rgba(59, 130, 246, 0.2);
+    transform: translateY(-15px) rotateX(5deg) scale(1.02);
+  }
+  
+  .achievement-badge {
+    transition: all 0.3s ease;
+  }
+  
+  .achievement-badge:hover {
+    transform: scale(1.1) rotate(5deg);
+    filter: drop-shadow(0 0 20px rgba(59, 130, 246, 0.6));
+  }
+  
+  .particles {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    overflow: hidden;
+    pointer-events: none;
+  }
+  
+  .particle {
+    position: absolute;
+    width: 4px;
+    height: 4px;
+    background: rgba(59, 130, 246, 0.6);
+    border-radius: 50%;
+    animation: float 8s infinite linear;
+  }
+  
+  .chakra-particle {
+    position: absolute;
+    width: 6px;
+    height: 6px;
+    background: radial-gradient(circle, rgba(59, 130, 246, 0.8) 0%, transparent 70%);
+    border-radius: 50%;
+    animation: chakra-float 10s infinite linear;
+    box-shadow: 0 0 10px rgba(59, 130, 246, 0.5);
+  }
+  
+  .energy-particle {
+    position: absolute;
+    width: 3px;
+    height: 8px;
+    background: linear-gradient(45deg, rgba(249, 115, 22, 0.8) 0%, rgba(59, 130, 246, 0.6) 100%);
+    border-radius: 2px;
+    animation: energy-float 12s infinite linear;
+    filter: blur(0.5px);
+  }
+  
+  .hero-bg {
+    background: linear-gradient(135deg, hsl(222, 84%, 5%) 0%, hsl(215, 28%, 17%) 50%, hsl(215, 20%, 25%) 100%);
+    position: relative;
+  }
+  
+  .section-divider {
+    height: 2px;
+    background: linear-gradient(90deg, transparent 0%, rgba(59, 130, 246, 0.8) 50%, transparent 100%);
+  }
+  
+  .tech-glow {
+    text-shadow: 0 0 10px rgba(59, 130, 246, 0.8);
+  }
+}
+
+@layer utilities {
+  .animate-spin-slow {
+    animation: spin 3s linear infinite;
+  }
+  
+  .animate-pulse-glow {
+    animation: pulse-glow 2s ease-in-out infinite alternate;
+  }
+  
+  .animate-float {
+    animation: float 6s ease-in-out infinite;
+  }
+  
+  .animate-chakra-spin {
+    animation: chakra-spin 4s linear infinite;
+  }
+  
+  .animate-jutsu-transition {
+    animation: jutsu-transition 1s ease-in-out;
+  }
+  
+  .animate-chakra-glow-intense {
+    animation: chakra-glow-intense 3s ease-in-out infinite;
+  }
+  
+  .animate-typing {
+    animation: typing 4s steps(40, end), blink-caret 0.75s step-end infinite;
+    border-right: 3px solid var(--chakra-blue);
+    white-space: nowrap;
+    overflow: hidden;
+  }
+  
+  .animate-text-reveal {
+    animation: text-reveal 1.5s ease-out forwards;
+  }
+  
+  .animate-text-glow {
+    animation: text-glow 2s ease-in-out infinite alternate;
+  }
+  
+  .animate-slide-in-left {
+    animation: slide-in-left 1s ease-out forwards;
+  }
+  
+  .animate-slide-in-right {
+    animation: slide-in-right 1s ease-out forwards;
+  }
+  
+  .animate-fade-in-up {
+    animation: fade-in-up 1.2s ease-out forwards;
+  }
+  
+  .animate-glitch {
+    animation: glitch 2s infinite;
+  }
+  
+  .animate-neon-flicker {
+    animation: neon-flicker 3s infinite alternate;
+  }
+}
+
+@keyframes pulse-glow {
+  0% { box-shadow: 0 0 20px rgba(59, 130, 246, 0.5); }
+  100% { box-shadow: 0 0 40px rgba(59, 130, 246, 0.8); }
+}
+
+@keyframes float {
+  0%, 100% { transform: translateY(0px); }
+  50% { transform: translateY(-20px); }
+}
+
+@keyframes chakra-spin {
+  0% { transform: rotate(0deg) scale(1); }
+  50% { transform: rotate(180deg) scale(1.1); }
+  100% { transform: rotate(360deg) scale(1); }
+}
+
+@keyframes rasengan-pulse {
+  0% { 
+    box-shadow: 0 0 50px rgba(59, 130, 246, 1), 0 0 100px rgba(59, 130, 246, 0.5);
+    filter: brightness(1);
+  }
+  100% { 
+    box-shadow: 0 0 70px rgba(59, 130, 246, 1), 0 0 140px rgba(59, 130, 246, 0.7);
+    filter: brightness(1.2);
+  }
+}
+
+@keyframes jutsu-transition {
+  0% { 
+    transform: scale(1) rotate(0deg);
+    opacity: 1;
+  }
+  50% { 
+    transform: scale(1.1) rotate(180deg);
+    opacity: 0.7;
+  }
+  100% { 
+    transform: scale(1) rotate(360deg);
+    opacity: 1;
+  }
+}
+
+@keyframes chakra-glow-intense {
+  0% { 
+    box-shadow: 0 0 20px rgba(59, 130, 246, 0.5);
+    border-color: rgba(59, 130, 246, 0.3);
+  }
+  50% { 
+    box-shadow: 0 0 40px rgba(59, 130, 246, 0.8), 0 0 80px rgba(249, 115, 22, 0.3);
+    border-color: rgba(59, 130, 246, 0.8);
+  }
+  100% { 
+    box-shadow: 0 0 20px rgba(59, 130, 246, 0.5);
+    border-color: rgba(59, 130, 246, 0.3);
+  }
+}
+
+@keyframes typing {
+  from { width: 0; }
+  to { width: 100%; }
+}
+
+@keyframes blink-caret {
+  from, to { border-color: transparent; }
+  50% { border-color: var(--chakra-blue); }
+}
+
+@keyframes text-reveal {
+  0% {
+    opacity: 0;
+    transform: translateY(30px);
+    filter: blur(5px);
+  }
+  100% {
+    opacity: 1;
+    transform: translateY(0);
+    filter: blur(0);
+  }
+}
+
+@keyframes text-glow {
+  0% {
+    text-shadow: 0 0 10px rgba(59, 130, 246, 0.8), 0 0 20px rgba(59, 130, 246, 0.4);
+  }
+  100% {
+    text-shadow: 0 0 20px rgba(59, 130, 246, 1), 0 0 40px rgba(59, 130, 246, 0.6), 0 0 60px rgba(249, 115, 22, 0.3);
+  }
+}
+
+@keyframes slide-in-left {
+  0% {
+    opacity: 0;
+    transform: translateX(-100px);
+  }
+  100% {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+@keyframes slide-in-right {
+  0% {
+    opacity: 0;
+    transform: translateX(100px);
+  }
+  100% {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+@keyframes fade-in-up {
+  0% {
+    opacity: 0;
+    transform: translateY(40px);
+  }
+  100% {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes chakra-float {
+  0% {
+    transform: translateY(100vh) rotate(0deg) scale(1);
+    opacity: 0;
+  }
+  10% {
+    opacity: 1;
+  }
+  90% {
+    opacity: 1;
+  }
+  100% {
+    transform: translateY(-10vh) rotate(360deg) scale(1.2);
+    opacity: 0;
+  }
+}
+
+@keyframes energy-float {
+  0% {
+    transform: translateY(100vh) rotate(0deg) translateX(0);
+    opacity: 0;
+  }
+  10% {
+    opacity: 0.8;
+  }
+  50% {
+    transform: translateY(50vh) rotate(180deg) translateX(20px);
+  }
+  90% {
+    opacity: 0.8;
+  }
+  100% {
+    transform: translateY(-10vh) rotate(360deg) translateX(-20px);
+    opacity: 0;
+  }
+}
+
+@keyframes glitch {
+  0%, 100% {
+    transform: translate(0);
+    filter: hue-rotate(0deg);
+  }
+  20% {
+    transform: translate(-2px, 2px);
+    filter: hue-rotate(90deg);
+  }
+  40% {
+    transform: translate(-2px, -2px);
+    filter: hue-rotate(180deg);
+  }
+  60% {
+    transform: translate(2px, 2px);
+    filter: hue-rotate(270deg);
+  }
+  80% {
+    transform: translate(2px, -2px);
+    filter: hue-rotate(360deg);
+  }
+}
+
+@keyframes neon-flicker {
+  0%, 100% {
+    text-shadow: 
+      0 0 5px var(--chakra-blue),
+      0 0 10px var(--chakra-blue),
+      0 0 15px var(--chakra-blue);
+  }
+  50% {
+    text-shadow: 
+      0 0 2px var(--chakra-blue),
+      0 0 5px var(--chakra-blue),
+      0 0 8px var(--chakra-blue),
+      0 0 12px var(--chakra-orange);
+  }
+}

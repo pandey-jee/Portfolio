@@ -1,0 +1,65 @@
+import { useAudio } from "@/hooks/use-audio";
+import { Button } from "@/components/ui/button";
+
+export default function HeroSection() {
+  const { playChakraSound } = useAudio();
+
+  const handleProjectsClick = () => {
+    playChakraSound();
+    const element = document.querySelector('#projects');
+    if (element) {
+      element.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    }
+  };
+
+  const handleResumeClick = () => {
+    playChakraSound();
+    // TODO: Implement resume download
+    console.log('Download resume clicked');
+  };
+
+  return (
+    <section id="home" className="min-h-screen hero-bg flex items-center justify-center relative">
+      <div className="container mx-auto px-6 text-center z-10">
+        <div className="mb-8">
+          <img 
+            src="https://images.unsplash.com/photo-1578662996442-48f60103fc96?ixlib=rb-4.0.3&auto=format&fit=crop&w=400&h=400" 
+            alt="Ninja character with chakra effects" 
+            className="w-48 h-48 mx-auto rounded-full border-4 border-primary shadow-lg shadow-primary/50 animate-pulse-glow hover:animate-chakra-spin transition-all duration-500 chakra-glow" 
+          />
+        </div>
+        
+        <h1 className="font-orbitron text-5xl md:text-7xl font-black mb-4 animate-text-glow hover:animate-glitch transition-all duration-300">
+          ABHISHEK KUMAR PANDEY
+        </h1>
+        <h2 className="text-2xl md:text-3xl mb-6 text-orange-500 font-semibold animate-slide-in-left">
+          Shinobi Engineer • Chakra-Powered Developer
+        </h2>
+        <p className="text-lg md:text-xl mb-8 max-w-3xl mx-auto text-slate-300 animate-text-reveal">
+          A 4th-year Computer Science student from Chandigarh University — a ninja coder blending logic, code, and creativity to build the future of web technology.
+        </p>
+        
+        <div className="flex flex-col md:flex-row gap-4 justify-center items-center">
+          <Button 
+            onClick={handleProjectsClick}
+            className="chakra-glow bg-primary hover:bg-blue-600 px-8 py-4 text-lg font-bold transform hover:scale-105"
+          >
+            <i className="fas fa-scroll mr-2"></i>View Projects
+          </Button>
+          <Button 
+            onClick={handleResumeClick}
+            variant="outline"
+            className="chakra-glow border-2 border-orange-500 text-orange-500 hover:bg-orange-500 hover:text-white px-8 py-4 text-lg font-bold"
+          >
+            <i className="fas fa-download mr-2"></i>Download Resume
+          </Button>
+        </div>
+      </div>
+      
+      {/* Floating chakra orbs */}
+      <div className="absolute top-20 left-20 w-4 h-4 bg-primary rounded-full animate-float opacity-60"></div>
+      <div className="absolute top-40 right-32 w-3 h-3 bg-orange-500 rounded-full animate-float opacity-50" style={{animationDelay: '2s'}}></div>
+      <div className="absolute bottom-32 left-1/4 w-5 h-5 bg-primary rounded-full animate-float opacity-40" style={{animationDelay: '4s'}}></div>
+    </section>
+  );
+}
