@@ -9,6 +9,7 @@ import AchievementsSection from "@/components/sections/achievements-section";
 import CertificatesSection from "@/components/sections/certificates-section";
 import ContactSection from "@/components/sections/contact-section";
 import NinjaTerminal from "@/components/ui/ninja-terminal";
+import ScrollToTopButton from "@/components/ui/scroll-to-top-button";
 import { initializeGSAP } from "@/lib/gsap-utils";
 import { FaTerminal } from "react-icons/fa";
 
@@ -24,9 +25,10 @@ export default function Home() {
       <RasenganCursor />
       <ParticleSystem />
       <Navigation />
+      <ScrollToTopButton />
       
-      {/* Floating controls */}
-      <div className="fixed top-20 right-6 z-40 flex flex-col space-y-4">
+      {/* Floating controls - positioned in bottom right corner */}
+      <div className="fixed bottom-5 right-5 z-40 flex flex-col space-y-4">
         <button
           onClick={() => setIsTerminalOpen(true)}
           className="w-16 h-16 bg-gray-800 hover:bg-gray-700 rounded-full flex items-center justify-center text-green-400 hover:text-green-300 transition-all duration-300 shadow-lg hover:shadow-xl"
