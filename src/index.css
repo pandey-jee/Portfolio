@@ -33,6 +33,68 @@
   --slate-600: hsl(215, 16%, 35%);
 }
 
+/* Light mode variables */
+.light {
+  --background: hsl(0, 0%, 100%);
+  --foreground: hsl(240, 10%, 3.9%);
+  --muted: hsl(240, 4.8%, 95.9%);
+  --muted-foreground: hsl(240, 3.8%, 46.1%);
+  --popover: hsl(0, 0%, 100%);
+  --popover-foreground: hsl(240, 10%, 3.9%);
+  --card: hsl(0, 0%, 100%);
+  --card-foreground: hsl(240, 10%, 3.9%);
+  --border: hsl(240, 5.9%, 90%);
+  --input: hsl(240, 5.9%, 90%);
+  --primary: hsl(207, 90%, 54%);
+  --primary-foreground: hsl(0, 0%, 98%);
+  --secondary: hsl(240, 4.8%, 95.9%);
+  --secondary-foreground: hsl(240, 5.9%, 10%);
+  --accent: hsl(240, 4.8%, 95.9%);
+  --accent-foreground: hsl(240, 5.9%, 10%);
+  --destructive: hsl(0, 84.2%, 60.2%);
+  --destructive-foreground: hsl(0, 0%, 98%);
+  --ring: hsl(240, 5%, 64.9%);
+  
+  /* Light mode Naruto colors */
+  --chakra-blue: hsl(207, 90%, 54%);
+  --chakra-orange: hsl(24, 95%, 53%);
+  --dark-navy: hsl(222, 84%, 95%);
+  --slate-800: hsl(215, 28%, 83%);
+  --slate-700: hsl(215, 20%, 75%);
+  --slate-600: hsl(215, 16%, 65%);
+}
+
+/* Dark mode variables (default) */
+.dark {
+  --background: hsl(240, 10%, 3.9%);
+  --foreground: hsl(0, 0%, 98%);
+  --muted: hsl(240, 3.7%, 15.9%);
+  --muted-foreground: hsl(240, 5%, 64.9%);
+  --popover: hsl(240, 10%, 3.9%);
+  --popover-foreground: hsl(0, 0%, 98%);
+  --card: hsl(240, 10%, 3.9%);
+  --card-foreground: hsl(0, 0%, 98%);
+  --border: hsl(240, 3.7%, 15.9%);
+  --input: hsl(240, 3.7%, 15.9%);
+  --primary: hsl(207, 90%, 54%);
+  --primary-foreground: hsl(211, 100%, 99%);
+  --secondary: hsl(240, 3.7%, 15.9%);
+  --secondary-foreground: hsl(0, 0%, 98%);
+  --accent: hsl(240, 3.7%, 15.9%);
+  --accent-foreground: hsl(0, 0%, 98%);
+  --destructive: hsl(0, 62.8%, 30.6%);
+  --destructive-foreground: hsl(0, 0%, 98%);
+  --ring: hsl(240, 4.9%, 83.9%);
+  
+  /* Dark mode Naruto colors */
+  --chakra-blue: hsl(207, 90%, 54%);
+  --chakra-orange: hsl(24, 95%, 53%);
+  --dark-navy: hsl(222, 84%, 5%);
+  --slate-800: hsl(215, 28%, 17%);
+  --slate-700: hsl(215, 20%, 25%);
+  --slate-600: hsl(215, 16%, 35%);
+}
+
 @layer base {
   * {
     @apply border-border;

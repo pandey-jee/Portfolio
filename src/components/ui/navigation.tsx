@@ -7,6 +7,7 @@ export default function Navigation() {
     { href: "#home", label: "Home" },
     { href: "#skills", label: "Skills" },
     { href: "#projects", label: "Projects" },
+    { href: "#certificates", label: "Certificates" },
     { href: "#achievements", label: "Achievements" },
     { href: "#contact", label: "Contact" },
   ];
